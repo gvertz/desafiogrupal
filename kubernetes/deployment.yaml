@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: desafiogrupal-k-deploy
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: desafiogrupal-k
+  template:
+    metadata:
+      labels:
+        app: desafiogrupal-k
+    spec:
+      containers:
+      - name: desafiogrupal-httpd
+        image: guillermovertz/desafiogrupal-httpd:latest
+        ports:
+        - containerPort: 80

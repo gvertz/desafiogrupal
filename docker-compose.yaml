@@ -1,0 +1,7 @@
+version: '3'
+services:
+  mi-aplicacion:
+    image: guillermovertz/desafiogrupal-httpd:latest
+    container_name: container-DG1
+    ports:
+      - "8000:8000"

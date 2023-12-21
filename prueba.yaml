@@ -1,0 +1,43 @@
+name: Docker Build and Push with Linting
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v2
+
+    - name: Build and Push Docker Image
+      env:
+        DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+        DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+      run: |
+        docker build -t guillermovertz/desafiogrupal-httpd:latest .
+        docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
+        docker push guillermovertz/desafiogrupal-httpd:latest
+
+  lint:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v2
+
+    - name: Install Linter (Adjust as needed)
+      run: |
+        # Install and configure your linter
+        # Example for eslint in a Node.js project
+        npm install -g eslint
+        eslint .
+    - name: Linting
+        run: npm run lint
+
+    - name: Scan Security
+        run: |
+       ./clair-scanner -c http://clair-service:6060 guillermovertz/desafiogrupal-httpd:latest
